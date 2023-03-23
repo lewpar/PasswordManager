@@ -41,6 +41,8 @@ def add_credential():
     username = input("|| Username: ")
     password = input("|| Password: ")
     website = input("|| Website: ")
+
+    # Encrypt the password using the Caeser Cipher, shifted by 3 to the right.
     password_encrypted = crypto.Rot.encrypt(password, ROT_CIPHER_SHIFT)
 
     # Add the credentials to the vault.
