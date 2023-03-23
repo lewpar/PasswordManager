@@ -1,23 +1,51 @@
 import os
 import pickle
+
+from time import sleep
 from vaultmgr import VaultManager, VaultEntry
 
 PATH_VAULT = "./vault"
 PATH_VAULT_FILE = f"{PATH_VAULT}/vault.vlt"
 
 vault_mgr: VaultManager
+exit_requested = False
+
+
+# Clears the console screen.
+def console_clear():
+    # If the system is windows, use the cls command.
+    if os.name == "nt":
+        _ = os.system("cls")
+    # Otherwise it's likely MacOS or Linux, use the clear command.
+    else:
+        _ = os.system("clear")
+
+
+def vault_save():
+    # Write a new VaultManager file to disk. Using mode 'wb' -> 'write', 'binary'
+    with open(PATH_VAULT_FILE, "wb") as vault_file:
+        # Serialize the VaultManager to a byte array.
+        pickle.dump(vault_mgr, vault_file)
 
 
 def add_credential():
-    username = input("Username")
-    password = input("Password")
-    website = input("Website")
+    console_clear()
+    username = input("Username: ")
+    password = input("Password: ")
+    website = input("Website: ")
 
     vault_mgr.add_entry(VaultEntry(username, password, website))
-    pass
 
 
 def view_credential():
+    console_clear()
+    for entry in vault_mgr.vault:
+        print(f"{entry.username} : {entry.password} : {entry.website}")
+
+
+def request_exit():
+    global exit_requested
+    exit_requested = True
     pass
 
 
@@ -27,7 +55,8 @@ def view_credential():
 # title of the menu option and the pointer to related function.
 menu_options = {
     0: ("Add Credentials", add_credential),
-    1: ("View Credentials", view_credential)
+    1: ("View Credentials", view_credential),
+    2: ("Quit", request_exit)
 }
 
 
@@ -35,7 +64,7 @@ def load_vault():
     # Make the vault_mgr global variable
     # writable from local scope.
     global vault_mgr
-    print(os.path.isfile(PATH_VAULT_FILE))
+
     # Check if the Vault File exists.
     if not os.path.isfile(PATH_VAULT_FILE):
         print("No vault found, creating new..")
@@ -48,11 +77,8 @@ def load_vault():
 
         # Create a new instance of the Vault Manager class.
         vault_mgr = VaultManager()
-
-        # Write a new VaultManager file to disk. Using mode 'wb' -> 'write', 'binary'
-        with open(PATH_VAULT_FILE, "wb") as vault_file:
-            # Serialize the VaultManager to a byte array.
-            pickle.dump(vault_mgr, vault_file)
+        vault_save()
+        sleep(2.5)
 
     # Vault does exist
     else:
@@ -84,9 +110,12 @@ def write_menu():
 # The entry-point of the application,
 # where the main execution begins for the application.
 def main():
+    console_clear()
+
     # Load the user password vault
     load_vault()
-    
+
+    console_clear()
     # Display the user menu and return user input
     user_input = write_menu()
     
@@ -106,8 +135,9 @@ def main():
         # Invalid option selected
         print("Invalid option, returning to menu.")
 
-    # Return to main-menu
-    main()
+    # Return to main-menu if not exiting.
+    if not exit_requested:
+        main()
 
 
 # If the application is imported as a module,
