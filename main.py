@@ -36,9 +36,24 @@ def write_menu():
 def main():
     # Display the user menu and return user input
     user_input = write_menu()
-    menu_title, menu_function = menu_options[int(user_input)]
-    print(f"Found: {menu_title}")
-    menu_function()
+    
+    try:
+        # Get the tuple result from the menu dictionary,
+        # containing the title and function pointer.
+        menu_title, menu_function = menu_options[int(user_input)]
+        
+        # Display the title of the menu selected
+        print("=============================")
+        print(f"|| {menu_title}")
+        print("=============================")
+        
+        # Call the function tied to the menu selected.
+        menu_function()
+    except:
+        # Invalid option selected
+        print("Invalid option.")
+        # Go back to the main menu
+        main()
 
 
 # If the application is imported as a module,
