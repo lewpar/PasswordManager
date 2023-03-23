@@ -1,11 +1,19 @@
 import os
+import pickle
+from vaultmgr import VaultManager, VaultEntry
 
-PATH_VAULT = "./vault/"
-PATH_VAULT_FILE = "./vault/vault.vlt"
+PATH_VAULT = "./vault"
+PATH_VAULT_FILE = f"{PATH_VAULT}/vault.vlt"
+
+vault_mgr: VaultManager
 
 
 def add_credential():
-    print("test")
+    username = input("Username")
+    password = input("Password")
+    website = input("Website")
+
+    vault_mgr.add_entry(VaultEntry(username, password, website))
     pass
 
 
@@ -24,12 +32,35 @@ menu_options = {
 
 
 def load_vault():
-    if not os.path.exists(PATH_VAULT):
+    # Make the vault_mgr global variable
+    # writable from local scope.
+    global vault_mgr
+
+    # Check if the Vault File exists.
+    if not os.path.isfile(PATH_VAULT_FILE):
         print("No vault found, creating new..")
-        os.mkdir(PATH_VAULT)
-        print(f"Created vault at '{os.path.realpath(PATH_VAULT)}'.")
-        
-    pass
+
+        # Vault path doesn't exist, create directory.
+        if not os.path.exists(PATH_VAULT):
+            os.mkdir(PATH_VAULT)
+
+        print(f"Created vault at '{os.path.realpath(PATH_VAULT_FILE)}'.")
+
+        # Create a new instance of the Vault Manager class.
+        vault_mgr = VaultManager()
+
+        # Write a new Vault Manager file to disk.
+        with open(PATH_VAULT_FILE, "wb") as vault_file:
+            # Serialize the VaultManager to a byte array.
+            pickle.dump(vault_file, vault_mgr)
+
+    # Vault does exist
+    else:
+        # Read the vault file from disk
+        with open(PATH_VAULT_FILE, "rb") as vault_file:
+            # Deserialize the vault file back into an instance of
+            # VaultManager.
+            vault_mgr = pickle.load(vault_file)
 
 
 def write_menu():
@@ -74,8 +105,9 @@ def main():
     except:
         # Invalid option selected
         print("Invalid option, returning to menu.")
-        # Go back to the main menu
-        main()
+
+    # Return to main-menu
+    main()
 
 
 # If the application is imported as a module,
