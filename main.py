@@ -8,6 +8,8 @@ from vaultmgr import VaultManager, VaultEntry
 PATH_VAULT = "./vault"
 PATH_VAULT_FILE = f"{PATH_VAULT}/vault.vlt"
 
+ROT_CIPHER_SHIFT = 3
+
 vault_mgr: VaultManager
 exit_requested = False
 
@@ -30,17 +32,24 @@ def vault_save():
 
 
 def add_credential():
-    username = input("Username: ")
-    password = input("Password: ")
-    website = input("Website: ")
+    username = input("|| Username: ")
+    password = input("|| Password: ")
+    website = input("|| Website: ")
+    password_encrypted = crypto.Rot.encrypt(password, ROT_CIPHER_SHIFT)
 
     vault_mgr.add_entry(VaultEntry(username, password, website))
+
+    print("=============================")
+    print(f"|| Credentials stored, password was encrypted as '{password_encrypted}'.")
+    print("=============================")
+    # Prompt the user to return to menu and discard any input received.
+    _ = input("Press <ENTER> to return to menu.")
 
 
 def view_credential():
     print(vault_mgr.vault)
     for entry in vault_mgr.vault:
-        print(f"{entry.username} : {entry.password} : {entry.website}")
+        print(f"|| {entry.username} : {entry.password} : {entry.website}")
 
     # Prompt the user to return to menu and discard any input received.
     _ = input("Press <ENTER> to return to menu.")
