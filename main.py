@@ -51,7 +51,7 @@ def main():
         menu_function()
     except:
         # Invalid option selected
-        print("Invalid option.")
+        print("Invalid option, returning to menu.")
         # Go back to the main menu
         main()
 
