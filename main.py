@@ -1,3 +1,9 @@
+import os
+
+PATH_VAULT = "./vault/"
+PATH_VAULT_FILE = "./vault/vault.vlt"
+
+
 def add_credential():
     print("test")
     pass
@@ -15,6 +21,15 @@ menu_options = {
     0: ("Add Credentials", add_credential),
     1: ("View Credentials", view_credential)
 }
+
+
+def load_vault():
+    if not os.path.exists(PATH_VAULT):
+        print("No vault found, creating new..")
+        os.mkdir(PATH_VAULT)
+        print(f"Created vault at '{os.path.realpath(PATH_VAULT)}'.")
+        
+    pass
 
 
 def write_menu():
@@ -38,6 +53,9 @@ def write_menu():
 # The entry-point of the application,
 # where the main execution begins for the application.
 def main():
+    # Load the user password vault
+    load_vault()
+    
     # Display the user menu and return user input
     user_input = write_menu()
     
