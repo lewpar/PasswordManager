@@ -43,7 +43,7 @@ def add_credential():
     website = input("|| Website: ")
     password_encrypted = crypto.Rot.encrypt(password, ROT_CIPHER_SHIFT)
 
-    vault_mgr.add_entry(VaultEntry(username, password, website))
+    vault_mgr.add_entry(VaultEntry(username, password_encrypted, website))
     vault_save()
 
     print("=============================")
