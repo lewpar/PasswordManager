@@ -35,7 +35,7 @@ def load_vault():
     # Make the vault_mgr global variable
     # writable from local scope.
     global vault_mgr
-
+    print(os.path.isfile(PATH_VAULT_FILE))
     # Check if the Vault File exists.
     if not os.path.isfile(PATH_VAULT_FILE):
         print("No vault found, creating new..")
@@ -49,14 +49,14 @@ def load_vault():
         # Create a new instance of the Vault Manager class.
         vault_mgr = VaultManager()
 
-        # Write a new Vault Manager file to disk.
+        # Write a new VaultManager file to disk. Using mode 'wb' -> 'write', 'binary'
         with open(PATH_VAULT_FILE, "wb") as vault_file:
             # Serialize the VaultManager to a byte array.
-            pickle.dump(vault_file, vault_mgr)
+            pickle.dump(vault_mgr, vault_file)
 
     # Vault does exist
     else:
-        # Read the vault file from disk
+        # Read the vault file from disk. Using mode 'rb' -> 'read', 'binary'
         with open(PATH_VAULT_FILE, "rb") as vault_file:
             # Deserialize the vault file back into an instance of
             # VaultManager.
@@ -69,7 +69,7 @@ def write_menu():
     print("=============================")
     
     # Iterate over the menu items dictionary
-    # to render the menu item names & index.
+    # to render the menu item titles & index.
     for i in range(0, len(menu_options)):
         menu_title, _ = menu_options[i]
         print(f"|| {i}) {menu_title}")
