@@ -43,20 +43,24 @@ def add_credential():
     website = input("|| Website: ")
     password_encrypted = crypto.Rot.encrypt(password, ROT_CIPHER_SHIFT)
 
+    # Add the credentials to the vault.
     vault_mgr.add_entry(VaultEntry(username, password_encrypted, website))
+
+    # Save the vault to file.
     vault_save()
 
     print("=============================")
     print(f"|| Credentials stored, password was encrypted as '{password_encrypted}'.")
     print("=============================")
+
     # Prompt the user to return to menu and discard any input received.
     _ = input("Press <ENTER> to return to menu.")
 
 
 def view_credential():
-    print(vault_mgr.vault)
+    # Iterate over the credentials in the vault and print them.
     for entry in vault_mgr.vault:
-        print(f"|| {entry.username} : {entry.password} : {entry.website}")
+        print(f"|| {entry.username} : {crypto.Rot.decrypt(entry.password, ROT_CIPHER_SHIFT)} : {entry.website}")
 
     # Prompt the user to return to menu and discard any input received.
     _ = input("Press <ENTER> to return to menu.")
