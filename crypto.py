@@ -2,7 +2,7 @@
 # Gist: https://gist.github.com/lewpar/4e63475fb845cdbe9b57385517e09588
 class Rot:
     # The charset that defines the shift values.
-    CHAR_SET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz`~!@#$%^&*()_-+=|\}]{[\"':;?/>.<, "
+    CHAR_SET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz`~!@#$%^&*()_-+=|\\}]{[\"':;?/>.<, "
 
     # Shifts the passphrase by the charset 
     # specified by `shift` places to the right.
@@ -25,4 +25,3 @@ class Rot:
         
         # Join the characters together, into a string.
         return "".join(decrypted_phrase)
-    
