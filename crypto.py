@@ -25,3 +25,4 @@ class Rot:
         
         # Join the characters together, into a string.
         return "".join(decrypted_phrase)
+    
