@@ -1,5 +1,6 @@
 import os
 import pickle
+import crypto
 
 from time import sleep
 from vaultmgr import VaultManager, VaultEntry
@@ -29,7 +30,6 @@ def vault_save():
 
 
 def add_credential():
-    console_clear()
     username = input("Username: ")
     password = input("Password: ")
     website = input("Website: ")
@@ -38,9 +38,12 @@ def add_credential():
 
 
 def view_credential():
-    console_clear()
+    print(vault_mgr.vault)
     for entry in vault_mgr.vault:
         print(f"{entry.username} : {entry.password} : {entry.website}")
+
+    # Prompt the user to return to menu and discard any input received.
+    _ = input("Press <ENTER> to return to menu.")
 
 
 def request_exit():
@@ -78,6 +81,8 @@ def load_vault():
         # Create a new instance of the Vault Manager class.
         vault_mgr = VaultManager()
         vault_save()
+
+        print("Entering main menu..")
         sleep(2.5)
 
     # Vault does exist
@@ -110,12 +115,12 @@ def write_menu():
 # The entry-point of the application,
 # where the main execution begins for the application.
 def main():
-    console_clear()
-
     # Load the user password vault
     load_vault()
 
+    # Clear the screen to remove the vault load text, if any.
     console_clear()
+
     # Display the user menu and return user input
     user_input = write_menu()
     
@@ -123,12 +128,15 @@ def main():
         # Get the tuple result from the menu dictionary,
         # containing the title and function pointer.
         menu_title, menu_function = menu_options[int(user_input)]
-        
+
+        # Clear the screen for the menu option.
+        console_clear()
+
         # Display the title of the menu selected
         print("=============================")
         print(f"|| {menu_title}")
         print("=============================")
-        
+
         # Call the function tied to the menu selected.
         menu_function()
     except:
