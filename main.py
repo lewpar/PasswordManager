@@ -7,6 +7,7 @@ from vaultmgr import VaultManager, VaultEntry
 
 PATH_VAULT = "./vault"
 PATH_VAULT_FILE = f"{PATH_VAULT}/vault.vlt"
+PATH_LOG = "./log.txt"
 
 ROT_CIPHER_SHIFT = 3
 
@@ -22,6 +23,11 @@ def console_clear():
     # Otherwise it's likely macOS or Linux, use the clear command.
     else:
         _ = os.system("clear")
+
+
+def dump_log(log):
+    with open(PATH_LOG, "at") as log_file:
+        log_file.write(f"{str(log)}\r\n")
 
 
 def vault_save():
@@ -148,9 +154,18 @@ def main():
 
         # Call the function tied to the menu selected.
         menu_function()
-    except:
-        # Invalid option selected
-        print("Invalid option, returning to menu.")
+    except KeyError:
+        pass
+    except ValueError:
+        pass
+    except Exception as ex:
+        # Unexpected error occurred, log to file.
+        print("An error occurred trying to execute a menu function with exception:")
+        print(ex)
+        print("Contact your supervisor to report the issue.")
+        print(f"Dumping error to '{PATH_LOG}'.")
+        dump_log(ex)
+        input()
 
     # Return to main-menu if not exiting.
     if not exit_requested:
