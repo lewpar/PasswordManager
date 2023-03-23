@@ -19,7 +19,7 @@ def console_clear():
     # If the system is windows, use the cls command.
     if os.name == "nt":
         _ = os.system("cls")
-    # Otherwise it's likely MacOS or Linux, use the clear command.
+    # Otherwise it's likely macOS or Linux, use the clear command.
     else:
         _ = os.system("clear")
 
