@@ -7,6 +7,10 @@ def view_credential():
     pass
 
 
+# The menu options that are selected by the key,
+# the key is selected from user input.
+# The value in the dictionary is a tuple containing the
+# title of the menu option and the pointer to related function.
 menu_options = {
     0: ("Add Credentials", add_credential),
     1: ("View Credentials", view_credential)
