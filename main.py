@@ -44,6 +44,7 @@ def add_credential():
     password_encrypted = crypto.Rot.encrypt(password, ROT_CIPHER_SHIFT)
 
     vault_mgr.add_entry(VaultEntry(username, password, website))
+    vault_save()
 
     print("=============================")
     print(f"|| Credentials stored, password was encrypted as '{password_encrypted}'.")
@@ -136,40 +137,38 @@ def main():
     # Clear the screen to remove the vault load text, if any.
     console_clear()
 
-    # Display the user menu and return user input
-    user_input = write_menu()
-    
-    try:
-        # Get the tuple result from the menu dictionary,
-        # containing the title and function pointer.
-        menu_title, menu_function = menu_options[int(user_input)]
+    # Loop the menu until exit has been requested.
+    while not exit_requested:
+        # Display the user menu and return user input
+        user_input = write_menu()
 
-        # Clear the screen for the menu option.
-        console_clear()
+        try:
+            # Get the tuple result from the menu dictionary,
+            # containing the title and function pointer.
+            menu_title, menu_function = menu_options[int(user_input)]
 
-        # Display the title of the menu selected
-        print("=============================")
-        print(f"|| {menu_title}")
-        print("=============================")
+            # Clear the screen for the menu option.
+            console_clear()
 
-        # Call the function tied to the menu selected.
-        menu_function()
-    except KeyError:
-        pass
-    except ValueError:
-        pass
-    except Exception as ex:
-        # Unexpected error occurred, log to file.
-        print("An error occurred trying to execute a menu function with exception:")
-        print(ex)
-        print("Contact your supervisor to report the issue.")
-        print(f"Dumping error to '{PATH_LOG}'.")
-        dump_log(ex)
-        input()
+            # Display the title of the menu selected
+            print("=============================")
+            print(f"|| {menu_title}")
+            print("=============================")
 
-    # Return to main-menu if not exiting.
-    if not exit_requested:
-        main()
+            # Call the function tied to the menu selected.
+            menu_function()
+        except KeyError:
+            pass
+        except ValueError:
+            pass
+        except Exception as ex:
+            # Unexpected error occurred, log to file.
+            print("An error occurred trying to execute a menu function with exception:")
+            print(ex)
+            print("Contact your supervisor to report the issue.")
+            print(f"Dumping error to '{PATH_LOG}'.")
+            dump_log(ex)
+            input()
 
 
 # If the application is imported as a module,

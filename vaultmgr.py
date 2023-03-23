@@ -1,8 +1,8 @@
 class VaultEntry:
-    def __init__(self, username, password, address):
+    def __init__(self, username, password, website):
         self.username = username
         self.password = password
-        self.address = address
+        self.website = website
 
 
 class VaultManager:
