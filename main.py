@@ -51,9 +51,9 @@ def add_credential():
     # Save the vault to file.
     vault_save()
 
-    print("=============================")
+    print()
     print(f"|| Credentials stored, password was encrypted as '{password_encrypted}'.")
-    print("=============================")
+    print()
 
     # Prompt the user to return to menu and discard any input received.
     _ = input("Press <ENTER> to return to menu.")
@@ -127,9 +127,9 @@ def write_menu():
         menu_title, _ = menu_options[i]
         print(f"|| {i}) {menu_title}")
         
-    print("=============================")
+    print()
     user_input = input("|| Enter menu option (number): ")
-    print("=============================")
+    print()
     
     return user_input
 
@@ -140,11 +140,11 @@ def main():
     # Load the user password vault
     load_vault()
 
-    # Clear the screen to remove the vault load text, if any.
-    console_clear()
-
     # Loop the menu until exit has been requested.
     while not exit_requested:
+        # Clear the screen to remove the vault load text / previous menus, if any.
+        console_clear()
+
         # Display the user menu and return user input
         user_input = write_menu()
 
