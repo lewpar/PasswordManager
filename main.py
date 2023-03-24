@@ -163,12 +163,11 @@ def main():
 
             # Call the function tied to the menu selected.
             menu_function()
-        except KeyError:
+        except KeyError:  # Ignore key errors and re-prompt menu.
             pass
-        except ValueError:
+        except ValueError:  # Ignore value errors and re-prompt menu.
             pass
-        except Exception as ex:
-            # Unexpected error occurred, log to file.
+        except Exception as ex:  # Unexpected error occurred, log to file.
             print("An error occurred trying to execute a menu function with exception:")
             print(ex)
             print("Contact your supervisor to report the issue.")
