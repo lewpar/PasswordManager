@@ -1,4 +1,6 @@
 # A class that contains the Rot, Caeser Cipher encrypt and decrypt functions.
+# Note: This algorithm is not cryptographically secure, as attackers can brute force
+#        the password very easily by shifting it back using the same charset.
 # Gist: https://gist.github.com/lewpar/4e63475fb845cdbe9b57385517e09588
 class Rot:
     # The charset that defines the shift values.
