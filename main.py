@@ -17,10 +17,10 @@ exit_requested = False
 
 # Clears the console screen.
 def console_clear():
-    # If the system is windows, use the cls command.
+    # If the system is Windows, use the cls command.
     if os.name == "nt":
         _ = os.system("cls")
-    # Otherwise it's likely macOS or Linux, use the clear command.
+    # Otherwise, it's likely macOS or Linux. Use the clear command.
     else:
         _ = os.system("clear")
 
@@ -35,6 +35,35 @@ def vault_save():
     with open(PATH_VAULT_FILE, "wb") as vault_file:
         # Serialize the VaultManager to a byte array.
         pickle.dump(vault_mgr, vault_file)
+        
+    
+# Check if the entry is already present in the vault.    
+def is_in_vault(vault_entry: VaultEntry):
+    for entry in vault_mgr.vault:
+        if entry.username.lower() == vault_entry.username.lower() and entry.website.lower() == vault_entry.website.lower():
+            return True
+        
+    return False
+
+
+def prompt_overwrite(vault_entry: VaultEntry):
+    print()
+    print("|| These credentials are already present in the vault.")
+    print("|| Do you want to overwrite?")
+    print()
+    print("|| 0) No")
+    print("|| 1) Yes")
+    print()
+    
+    user_input = ""
+    
+    while(True):
+        user_input = input("> ").strip()
+        if user_input == "0" or user_input == "1":
+            break
+    
+    # Using a Ternary Operator to return True or False based on user_input.
+    return True if user_input == "1" else False
 
 
 def add_credential():
@@ -45,15 +74,32 @@ def add_credential():
     # Encrypt the password using the Caeser Cipher, shifted by 3 to the right.
     password_encrypted = crypto.Rot.encrypt(password, ROT_CIPHER_SHIFT)
 
-    # Add the credentials to the vault.
-    vault_mgr.add_entry(VaultEntry(username, password_encrypted, website))
+    new_vault_entry = VaultEntry(username, password_encrypted, website)
+    
+    should_save = False
+    
+    # Check is the credentials are already present in the vault.
+    if not is_in_vault(new_vault_entry):
+        # Add the credentials to the vault.
+        vault_mgr.add_entry(new_vault_entry)
+        should_save = True
+    else:
+        overwrite = prompt_overwrite(new_vault_entry)
+        
+        # Overwrite the entry if user chose 'yes' to overwrite.
+        if overwrite:
+            vault_mgr.overwrite_entry(new_vault_entry)
+            should_save = True
+    
+    # Flag on whether the vault should be saved to disk,
+    # saves on disk writes when you haven't changed anything.
+    if should_save:
+        # Save the vault to file.
+        vault_save()
 
-    # Save the vault to file.
-    vault_save()
-
-    print()
-    print(f"|| Credentials stored, password was encrypted as '{password_encrypted}'.")
-    print()
+        print()
+        print(f"|| Credentials stored, password was encrypted as '{password_encrypted}'.")
+        print()
 
     # Prompt the user to return to menu and discard any input received.
     _ = input("Press <ENTER> to return to menu.")
