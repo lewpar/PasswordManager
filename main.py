@@ -41,11 +41,13 @@ def console_clear():
         _ = os.system("clear")
 
 
+# Dumps an error to the log file on disk.
 def dump_log(log):
     with open(PATH_LOG, "at") as log_file:
         log_file.write(f"{str(log)}\r\n")
 
 
+# Saves the vault to disk.
 def vault_save():
     # Write a new VaultManager file to disk. Using mode 'wb' -> 'write', 'binary'
     with open(PATH_VAULT_FILE, "wb") as vault_file:
