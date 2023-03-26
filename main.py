@@ -47,7 +47,7 @@ def dump_log(log):
         log_file.write(f"{str(log)}\r\n")
 
 
-# Saves the vault to disk.
+# Saves the vault to disk by serializing the vault list to bytes.
 def vault_save():
     # Write a new VaultManager file to disk. Using mode 'wb' -> 'write', 'binary'
     with open(PATH_VAULT_FILE, "wb") as vault_file:
