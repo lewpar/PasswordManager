@@ -102,16 +102,65 @@ def add_credential():
         print()
 
     # Prompt the user to return to menu and discard any input received.
-    _ = input("Press <ENTER> to return to menu.")
+    _ = input("Press <ENTER> to return to main menu.")
 
 
 def view_credential():
+    # If there are no credentials in the vault, prompt the user to make one.
+    if len(vault_mgr.vault) < 1:
+        print()
+        print("No credentials found, navigate to 'Add Credentials' on the menu to create one")
+        print()
+        _ = input("Press <ENTER> to return to main menu.")
+        return
+    
+    print("|| Format: username : password : website")
+    print()
     # Iterate over the credentials in the vault and print them.
-    for entry in vault_mgr.vault:
-        print(f"|| {entry.username} : {crypto.Rot.decrypt(entry.password, ROT_CIPHER_SHIFT)} : {entry.website}")
+    for i in range(len(vault_mgr.vault)):
+        entry = vault_mgr.vault[i]
+        print(f"|| {i}) {entry.username} : {crypto.Rot.decrypt(entry.password, ROT_CIPHER_SHIFT)} : {entry.website}")
 
-    # Prompt the user to return to menu and discard any input received.
-    _ = input("Press <ENTER> to return to menu.")
+    print()
+    print("To remove an entry, type 'delete' followed by the entry number.")
+    print("Example: delete 1")
+    print()
+    print("Otherwise, type 'quit' to return to menu.")
+    print()
+    
+    entry_deleted = False
+    
+    while True:
+        user_input = input("> ").strip()
+        
+        if user_input.lower() == "quit":
+            break
+        
+        elif user_input.lower().startswith("delete"):
+            try: 
+                # Convert the second item in split to an integer.
+                entry_index = int(user_input.split(' ')[1])
+                
+                # The deletion index is higher than the amount of credentials in the vault.
+                # Continue to next loop and re-prompt.
+                if entry_index > len(vault_mgr.vault) or entry_index < 0:
+                    print("Invalid entry index.")
+                    continue
+                
+                # Delete entry, set flag, then break out of the loop.
+                del vault_mgr.vault[entry_index]
+                entry_deleted = True
+                break
+            
+            except ValueError or KeyError:  # Catch errors, continue and re-prompt.
+                print("Invalid input.")
+                continue
+            
+    # If an entry was deleted, we want to refresh the credentials.
+    # Save credentials to disk, clear screen, and re-open the credentials screen.
+    if entry_deleted:
+        vault_save()
+        _ = input("Deleted entry, press <ENTER> to return to main menu.")
 
 
 def request_exit():
@@ -209,9 +258,7 @@ def main():
 
             # Call the function tied to the menu selected.
             menu_function()
-        except KeyError:  # Ignore key errors and re-prompt menu.
-            pass
-        except ValueError:  # Ignore value errors and re-prompt menu.
+        except ValueError or KeyError:  # Ignore value/key errors and re-prompt menu.
             pass
         except Exception as ex:  # Unexpected error occurred, log to file.
             print("An error occurred trying to execute a menu function with exception:")
