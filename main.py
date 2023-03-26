@@ -1,17 +1,37 @@
+# Imports the OS related functions, like reading and writing to disk.
 import os
+
+# Imports the serialization tools, otherwise known as 'pickling'.
+# This allows me to write class objects to disk.
 import pickle
+
+# Imports the crypto.py file I created.
 import crypto
 
+# Imports the sleep function so I can sleep on first load
+# of the application.
 from time import sleep
+
+# Imports the vaultmgr.py file I created,
+# only importing the two types I created.
 from vaultmgr import VaultManager, VaultEntry
 
+
+# Path variables for the vault and log file.
 PATH_VAULT = "./vault"
 PATH_VAULT_FILE = f"{PATH_VAULT}/vault.vlt"
 PATH_LOG = "./log.txt"
 
+
+# The Caeser Cipher shift value.
 ROT_CIPHER_SHIFT = 3
 
+
+# The vault manager class instance.
 vault_mgr: VaultManager
+
+
+# The flag to detect when to exit the program from menu.
 exit_requested = False
 
 
