@@ -62,6 +62,7 @@ def is_in_vault(vault_entry: VaultEntry):
     return False
 
 
+# Prompt the user to overwrite existing vault credentials.
 def prompt_overwrite(vault_entry: VaultEntry):
     print()
     print("|| These credentials are already present in the vault.")
@@ -83,6 +84,7 @@ def prompt_overwrite(vault_entry: VaultEntry):
     return True if user_input == "1" else False
 
 
+# Prompt the user to add a new credential to the vault.
 def add_credential():
     username = input("|| Username: ")
     password = input("|| Password: ")
@@ -124,6 +126,7 @@ def add_credential():
     _ = input("Press <ENTER> to return to main menu.")
 
 
+# Prompt the user with credentials in the vault.
 def view_credential():
     # If there are no credentials in the vault, prompt the user to make one.
     if len(vault_mgr.vault) < 1:
@@ -199,6 +202,7 @@ menu_options = {
 }
 
 
+# Load the vault from disk into the vault_mgr instance.
 def load_vault():
     # Make the vault_mgr global variable
     # writable from local scope.
@@ -231,6 +235,7 @@ def load_vault():
             vault_mgr = pickle.load(vault_file)
 
 
+# Prompt the user with the main menu.
 def write_menu():
     print("=============================")
     print("|| DigiCore Password Vault ||")
