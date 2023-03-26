@@ -16,20 +16,16 @@ from time import sleep
 # only importing the two types I created.
 from vaultmgr import VaultManager, VaultEntry
 
-
 # Path variables for the vault and log file.
 PATH_VAULT = "./vault"
 PATH_VAULT_FILE = f"{PATH_VAULT}/vault.vlt"
 PATH_LOG = "./log.txt"
 
-
 # The Caeser Cipher shift value.
 ROT_CIPHER_SHIFT = 3
 
-
 # The vault manager class instance.
 vault_mgr: VaultManager
-
 
 # The flag to detect when to exit the program from menu.
 exit_requested = False
