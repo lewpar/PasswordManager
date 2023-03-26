@@ -57,6 +57,7 @@ def prompt_overwrite(vault_entry: VaultEntry):
     
     user_input = ""
     
+    # Loops until the user enters either '0' or '1'.
     while(True):
         user_input = input("> ").strip()
         if user_input == "0" or user_input == "1":
@@ -74,8 +75,10 @@ def add_credential():
     # Encrypt the password using the Caeser Cipher, shifted by 3 to the right.
     password_encrypted = crypto.Rot.encrypt(password, ROT_CIPHER_SHIFT)
 
+    # Create a new vault entry with the encrypted password.
     new_vault_entry = VaultEntry(username, password_encrypted, website)
     
+    # Used later to detect if anything has changed and should save the vault.
     should_save = False
     
     # Check is the credentials are already present in the vault.
@@ -193,6 +196,7 @@ def load_vault():
         if not os.path.exists(PATH_VAULT):
             os.mkdir(PATH_VAULT)
 
+        # Just prompts the user on where the vault is created on disk.
         print(f"Created vault at '{os.path.realpath(PATH_VAULT_FILE)}'.")
 
         # Create a new instance of the Vault Manager class.
