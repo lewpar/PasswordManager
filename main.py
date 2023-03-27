@@ -225,6 +225,8 @@ def view_credential():
         _ = input("Deleted entry, press <ENTER> to return to main menu.")
 
 
+# Sets the exit_requested flag to tell the main
+# menu loop to exit the application.
 def request_exit():
     global exit_requested
     exit_requested = True
