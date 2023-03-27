@@ -223,7 +223,7 @@ def load_vault():
         if not os.path.exists(PATH_VAULT):
             os.mkdir(PATH_VAULT)
 
-        # Just prompts the user on where the vault is created on disk and logs it.
+        # Prompts the user on where the vault is created on disk and logs it.
         print(f"Created vault at '{os.path.realpath(PATH_VAULT_FILE)}'.")
         dump_log(f"Created vault at '{os.path.realpath(PATH_VAULT_FILE)}'.")
 
