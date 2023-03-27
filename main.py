@@ -168,6 +168,7 @@ def view_credential():
     
     print("|| Format: username : password : website")
     print()
+    
     # Iterate over the credentials in the vault and print them.
     for i in range(len(vault_mgr.vault)):
         entry = vault_mgr.vault[i]
