@@ -14,12 +14,10 @@ class VaultManager:
     def __init__(self):
         self.vault = []
 
-
     # This method adds a new entry to the vault.
     def add_entry(self, vault_entry: VaultEntry):
         self.vault.append(vault_entry)
-        
-    
+
     # This method overwrites any entry in the vault that matches username and website.
     # Replaces the username, password, and website values.
     def overwrite_entry(self, replace_entry: VaultEntry):

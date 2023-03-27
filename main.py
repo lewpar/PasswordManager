@@ -8,7 +8,7 @@ import pickle
 # Imports the crypto.py file I created.
 import crypto
 
-# Imports the sleep function so I can sleep on first load
+# Imports the sleep function, so I can sleep on first load
 # of the application.
 from time import sleep
 
@@ -61,14 +61,15 @@ def vault_save():
 # Check if the entry is already present in the vault.    
 def is_in_vault(vault_entry: VaultEntry):
     for entry in vault_mgr.vault:
-        if entry.username.lower() == vault_entry.username.lower() and entry.website.lower() == vault_entry.website.lower():
+        if entry.username.lower() == vault_entry.username.lower() and \
+                entry.website.lower() == vault_entry.website.lower():
             return True
         
     return False
 
 
 # Prompt the user to overwrite existing vault credentials.
-def prompt_overwrite(vault_entry: VaultEntry):
+def prompt_overwrite():
     print()
     print("|| These credentials are already present in the vault.")
     print("|| Do you want to overwrite?")
@@ -80,7 +81,7 @@ def prompt_overwrite(vault_entry: VaultEntry):
     user_input = ""
     
     # Loops until the user enters either '0' or '1'.
-    while(True):
+    while True:
         user_input = input("> ").strip()
         if user_input == "0" or user_input == "1":
             break
@@ -97,7 +98,7 @@ def add_credential():
     tries = 0
     
     # Loop until all entries are populated with a value.
-    while(username == "" or password == "" or website == ""):
+    while username == "" or password == "" or website == "":
         if tries > 0:
             # Clear the entries to prevent caching which allows
             # a desync between display and actual value.
@@ -128,7 +129,7 @@ def add_credential():
         vault_mgr.add_entry(new_vault_entry)
         should_save = True
     else:
-        overwrite = prompt_overwrite(new_vault_entry)
+        overwrite = prompt_overwrite()
         
         # Overwrite the entry if user chose 'yes' to overwrite.
         if overwrite:
