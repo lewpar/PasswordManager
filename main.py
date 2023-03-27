@@ -1,10 +1,6 @@
 # Imports the OS related functions, like reading and writing to disk.
 import os
 
-# Imports the serialization tools, otherwise known as 'pickling'.
-# This allows me to write class objects to disk.
-import pickle
-
 # Imports the crypto.py file I created.
 import crypto
 
@@ -43,19 +39,10 @@ def console_clear():
     else:
         _ = os.system("clear")
 
-
 # Dumps an error to the log file on disk.
 def dump_log(log):
     with open(PATH_LOG, "at") as log_file:
         log_file.write(f"[{datetime.now()}]: {str(log)}\r\n")
-
-
-# Saves the vault to disk by serializing the vault list to bytes.
-def vault_save():
-    # Write a new VaultManager file to disk. Using mode 'wb' -> 'write', 'binary'
-    with open(PATH_VAULT_FILE, "wb") as vault_file:
-        # Serialize the VaultManager to a byte array.
-        pickle.dump(vault_mgr, vault_file)
         
     
 # Check if the entry is already present in the vault.    
@@ -140,7 +127,7 @@ def add_credential():
     # saves on disk writes when you haven't changed anything.
     if should_save:
         # Save the vault to file.
-        vault_save()
+        vault_mgr.vault_save()
 
         print()
         print(f"|| Credentials stored, password was encrypted as '{password_encrypted}'.")
@@ -207,7 +194,7 @@ def view_credential():
     # If an entry was deleted, we want to refresh the credentials.
     # Save credentials to disk, clear screen, and re-open the credentials screen.
     if entry_deleted:
-        vault_save()
+        vault_mgr.vault_save()
         _ = input("Deleted entry, press <ENTER> to return to main menu.")
 
 
@@ -247,19 +234,15 @@ def load_vault():
         dump_log(f"Created vault at '{os.path.realpath(PATH_VAULT_FILE)}'.")
 
         # Create a new instance of the Vault Manager class.
-        vault_mgr = VaultManager()
-        vault_save()
+        vault_mgr = VaultManager(PATH_VAULT_FILE)
+        vault_mgr.vault_save()
 
         print("Entering main menu..")
         sleep(2.5)
 
     # Vault does exist
     else:
-        # Read the vault file from disk. Using mode 'rb' -> 'read', 'binary'
-        with open(PATH_VAULT_FILE, "rb") as vault_file:
-            # Deserialize the vault file back into an instance of
-            # VaultManager.
-            vault_mgr = pickle.load(vault_file)
+        vault_mgr = VaultManager.vault_load(PATH_VAULT_FILE)
 
 
 # Prompt the user with the main menu.

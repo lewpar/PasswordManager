@@ -1,3 +1,7 @@
+# Imports the serialization tools, otherwise known as 'pickling'.
+# This allows me to write class objects to disk.
+import pickle
+
 # This is the VaultEntry class which is used in the VaultManager list.
 # It is just a basic data object that stores username, password, and website.
 class VaultEntry:
@@ -11,8 +15,9 @@ class VaultEntry:
 class VaultManager:
     
     # This acts as a kind of constructor for the class where I can initialize class scope variables.
-    def __init__(self):
+    def __init__(self, path_vault):
         self.vault = []
+        self.path_vault = path_vault
 
     # This method adds a new entry to the vault.
     def add_entry(self, vault_entry: VaultEntry):
@@ -27,3 +32,19 @@ class VaultManager:
             if vault_entry.username.lower() == replace_entry.username.lower() and vault_entry.website.lower() == replace_entry.website.lower():
                 self.vault[i] = replace_entry
                 break
+            
+    # Saves the vault to disk by serializing the vault list to bytes.
+    def vault_save(self):
+        # Write a new VaultManager file to disk. Using mode 'wb' -> 'write', 'binary'
+        with open(self.path_vault, "wb") as vault_file:
+            # Serialize the VaultManager to a byte array.
+            pickle.dump(self, vault_file)
+    
+    # Loads the vault from disk, deserializing to a VaultManager instance.
+    @staticmethod
+    def vault_load(path_vault):
+        # Read the vault file from disk. Using mode 'rb' -> 'read', 'binary'
+        with open(path_vault, "rb") as vault_file:
+            # Deserialize the vault file back into an instance of
+            # VaultManager.
+            return pickle.load(vault_file)
