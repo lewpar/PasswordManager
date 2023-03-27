@@ -15,10 +15,10 @@ from datetime import datetime
 from vaultmgr import VaultManager, VaultEntry
 
 # Path variables for the vault, config, and log file.
-PATH_VAULT = ""
+PATH_VAULT = "./vault"
 PATH_VAULT_FILE = "/vault.vlt"
 PATH_CONFIG = "./config.ini"
-PATH_LOG = ""
+PATH_LOG = "./log.txt"
 
 # The Caeser Cipher shift value.
 ROT_CIPHER_SHIFT = 0
