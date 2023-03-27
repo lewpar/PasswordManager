@@ -51,6 +51,7 @@ def console_clear():
     else:
         _ = os.system("clear")
 
+
 # Dumps an error to the log file on disk.
 def dump_log(log):
     # If the log file is moved to a new directory that doesn't exist, create it.
@@ -272,6 +273,7 @@ def write_menu():
     
     return user_input
 
+
 # Print any unhandled exceptions to the user and prompt contacting supervisor.
 def print_error(exception):
     print("An unexpected error occurred during execution:")
@@ -303,11 +305,11 @@ def load_config():
     
     # Check if the config already exists, if not create it with default values.
     if not os.path.isfile(PATH_CONFIG):
-        config["General"] = { 'RotShift': '3', 'VaultPath': './vault', 'LogPath': './log.txt' }
+        config["General"] = {'RotShift': '3', 'VaultPath': './vault', 'LogPath': './log.txt'}
         
         with open(PATH_CONFIG, 'w') as file_config:
             config.write(file_config)
-    else: # Otherwise, read from disk.
+    else:  # Otherwise, read from disk.
         config.read(PATH_CONFIG)
         
     # If there is any issue loading the config values, print the error.
