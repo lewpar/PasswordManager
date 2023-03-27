@@ -191,8 +191,17 @@ def view_credential():
         
         elif user_input.lower().startswith("delete"):
             try: 
+                # Store the arguments for the delete command
+                delete_args = user_input.split(' ')
+                
+                # Check that at least 1 argument has been passed,
+                # but no more than 1.
+                if len(delete_args) != 2:
+                    print("Invalid arguments.")
+                    continue
+                
                 # Convert the second item in split to an integer.
-                entry_index = int(user_input.split(' ')[1])
+                entry_index = int(delete_args[1])
                 
                 # The deletion index is higher than the amount of credentials in the vault.
                 # Continue to next loop and re-prompt.
