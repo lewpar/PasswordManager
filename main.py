@@ -7,10 +7,6 @@ import crypto
 # Imports the config parser for reading config files.
 import configparser
 
-# Imports the sleep function, so I can sleep on first load
-# of the application.
-from time import sleep
-
 # Imports the datetime functions.
 from datetime import datetime
 
