@@ -233,8 +233,7 @@ menu_options = {
 
 # Load the vault from disk into the vault_mgr instance.
 def load_vault():
-    # Make the vault_mgr global variable
-    # writable from local scope.
+    # Make the vault_mgr global variable writable from local scope.
     global vault_mgr
 
     # Check if the Vault File exists.
@@ -296,18 +295,22 @@ def print_error(exception):
 
 # Check for config.ini on disk and load it in, or create it if missing.
 def load_config():
+    # Make the global variables writable from local scope.
     global config, ROT_CIPHER_SHIFT, PATH_VAULT, PATH_LOG
     
+    # Intantiate a ConfigParser instance and store it in config.
     config = configparser.ConfigParser()
     
+    # Check if the config already exists, if not create it with default values.
     if not os.path.isfile(PATH_CONFIG):
         config["General"] = { 'RotShift': '3', 'VaultPath': './vault', 'LogPath': './log.txt' }
         
         with open(PATH_CONFIG, 'w') as file_config:
             config.write(file_config)
-    else:
+    else: # Otherwise, read from disk.
         config.read(PATH_CONFIG)
         
+    # If there is any issue loading the config values, print the error.
     try:
         ROT_CIPHER_SHIFT = int(config["General"]["RotShift"])
         PATH_VAULT = config["General"]["VaultPath"]
