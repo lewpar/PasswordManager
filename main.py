@@ -276,6 +276,8 @@ def write_menu():
 
 # Print any unhandled exceptions to the user and prompt contacting supervisor.
 def print_error(exception):
+    # Allow global variable to be writable from local scope
+    global exit_requested
     print("An unexpected error occurred during execution:")
     
     # The formatted error to display.
