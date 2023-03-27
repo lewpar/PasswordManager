@@ -91,9 +91,27 @@ def prompt_overwrite(vault_entry: VaultEntry):
 
 # Prompt the user to add a new credential to the vault.
 def add_credential():
-    username = input("|| Username: ")
-    password = input("|| Password: ")
-    website = input("|| Website: ")
+    username, password, website = ("", "", "")
+    
+    # The amount of tries the user has attempted.
+    tries = 0
+    
+    # Loop until all entries are populated with a value.
+    while(username == "" or password == "" or website == ""):
+        if tries > 0:
+            # Clear the entries to prevent caching which allows
+            # a desync between display and actual value.
+            username, password, website = ("", "", "")
+            print()
+            print("You must enter a value for all entries.")
+            print()
+            
+        username = input("|| Username: ").strip()
+        password = input("|| Password: ").strip()
+        website = input("|| Website: ").strip()
+        
+        # Increment tries for next loop.
+        tries += 1
 
     # Encrypt the password using the Caeser Cipher, shifted by 3 to the right.
     password_encrypted = crypto.Rot.encrypt(password, ROT_CIPHER_SHIFT)
