@@ -293,14 +293,14 @@ def main():
 
             # Call the function tied to the menu selected.
             menu_function()
-        except ValueError or KeyError:  # Ignore value/key errors and re-prompt menu.
+        except (ValueError, KeyError):  # Ignore value/key errors and re-prompt menu.
             pass
         except Exception as ex:  # Unexpected error occurred, log to file.
             print("An error occurred trying to execute a menu function with exception:")
             print(ex)
             print("Contact your supervisor to report the issue.")
             print(f"Dumping error to '{PATH_LOG}'.")
-            dump_log(ex)
+            dump_log(f"[L{ex.__traceback__.tb_lineno}] [{type(ex).__name__}]: {ex}")
             input()
 
 
