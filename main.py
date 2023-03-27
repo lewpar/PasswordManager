@@ -4,6 +4,9 @@ import os
 # Imports the crypto.py file I created.
 import crypto
 
+# Imports the config parser for reading config files.
+import configparser
+
 # Imports the sleep function, so I can sleep on first load
 # of the application.
 from time import sleep
@@ -15,19 +18,28 @@ from datetime import datetime
 # only importing the two types I created.
 from vaultmgr import VaultManager, VaultEntry
 
-# Path variables for the vault and log file.
-PATH_VAULT = "./vault"
-PATH_VAULT_FILE = f"{PATH_VAULT}/vault.vlt"
-PATH_LOG = "./log.txt"
+# Path variables for the vault, config, and log file.
+PATH_VAULT = ""
+PATH_VAULT_FILE = "/vault.vlt"
+PATH_CONFIG = "./config.ini"
+PATH_LOG = ""
 
 # The Caeser Cipher shift value.
-ROT_CIPHER_SHIFT = 3
+ROT_CIPHER_SHIFT = 0
+
+# The configuration instance
+config: configparser.ConfigParser
 
 # The vault manager class instance.
 vault_mgr: VaultManager
 
 # The flag to detect when to exit the program from menu.
 exit_requested = False
+
+
+# Formats the vault file location.
+def vault_file_loc():
+    return f"{PATH_VAULT}{PATH_VAULT_FILE}"
 
 
 # Clears the console screen.
@@ -41,6 +53,10 @@ def console_clear():
 
 # Dumps an error to the log file on disk.
 def dump_log(log):
+    # If the log file is moved to a new directory that doesn't exist, create it.
+    if not os.path.isfile(PATH_LOG):
+        os.makedirs(os.path.dirname(PATH_LOG), exist_ok=True)
+        
     with open(PATH_LOG, "at") as log_file:
         log_file.write(f"[{datetime.now()}]: {str(log)}\r\n")
         
@@ -222,27 +238,21 @@ def load_vault():
     global vault_mgr
 
     # Check if the Vault File exists.
-    if not os.path.isfile(PATH_VAULT_FILE):
-        print("No vault found, creating new..")
+    if not os.path.isfile(vault_file_loc()):
+        # Vault path doesn't exist, create it.
+        if not os.path.exists(vault_file_loc()):
+            os.makedirs(os.path.dirname(vault_file_loc()), exist_ok=True)
 
-        # Vault path doesn't exist, create directory.
-        if not os.path.exists(PATH_VAULT):
-            os.mkdir(PATH_VAULT)
-
-        # Prompts the user on where the vault is created on disk and logs it.
-        print(f"Created vault at '{os.path.realpath(PATH_VAULT_FILE)}'.")
-        dump_log(f"Created vault at '{os.path.realpath(PATH_VAULT_FILE)}'.")
+        # Logs the vault location to log.txt.
+        dump_log(f"Created new vault at '{os.path.realpath(vault_file_loc())}'.")
 
         # Create a new instance of the Vault Manager class.
-        vault_mgr = VaultManager(PATH_VAULT_FILE)
+        vault_mgr = VaultManager(vault_file_loc())
         vault_mgr.vault_save()
-
-        print("Entering main menu..")
-        sleep(2.5)
 
     # Vault does exist
     else:
-        vault_mgr = VaultManager.vault_load(PATH_VAULT_FILE)
+        vault_mgr = VaultManager.vault_load(vault_file_loc())
 
 
 # Prompt the user with the main menu.
@@ -263,10 +273,55 @@ def write_menu():
     
     return user_input
 
+# Print any unhandled exceptions to the user and prompt contacting supervisor.
+def print_error(exception):
+    print("An unexpected error occurred during execution:")
+    
+    # The formatted error to display.
+    error = f"[L{exception.__traceback__.tb_lineno}] [{type(exception).__name__}]: {exception}"
+    
+    print(error)
+    print("Contact your supervisor to report the issue.")
+    print(f"Dumping error to '{PATH_LOG}'.")
+    
+    # Dump the error to the log file.
+    dump_log(error)
+    
+    # Prompt the user to exit and discard the result.
+    _ = input("Press <ENTER> to exit.")
+    
+    # Request exit from the application to prevent data corruption.
+    exit_requested = True
+
+
+# Check for config.ini on disk and load it in, or create it if missing.
+def load_config():
+    global config, ROT_CIPHER_SHIFT, PATH_VAULT, PATH_LOG
+    
+    config = configparser.ConfigParser()
+    
+    if not os.path.isfile(PATH_CONFIG):
+        config["General"] = { 'RotShift': '3', 'VaultPath': './vault', 'LogPath': './log.txt' }
+        
+        with open(PATH_CONFIG, 'w') as file_config:
+            config.write(file_config)
+    else:
+        config.read(PATH_CONFIG)
+        
+    try:
+        ROT_CIPHER_SHIFT = int(config["General"]["RotShift"])
+        PATH_VAULT = config["General"]["VaultPath"]
+        PATH_LOG = config["General"]["LogPath"]
+    except Exception as ex:
+        print_error(ex)
+
 
 # The entry-point of the application,
 # where the main execution begins for the application.
 def main():
+    # Load the config.ini settings
+    load_config()
+    
     # Load the user password vault
     load_vault()
 
@@ -296,13 +351,9 @@ def main():
         except (ValueError, KeyError):  # Ignore value/key errors and re-prompt menu.
             pass
         except Exception as ex:  # Unexpected error occurred, log to file.
-            print("An error occurred trying to execute a menu function with exception:")
-            error = f"[L{ex.__traceback__.tb_lineno}] [{type(ex).__name__}]: {ex}"
-            print(error)
-            print("Contact your supervisor to report the issue.")
-            print(f"Dumping error to '{PATH_LOG}'.")
-            dump_log(error)
-            input()
+            print_error(ex)
+            
+    dump_log("Quit Application")
 
 
 # If the application is imported as a module,
