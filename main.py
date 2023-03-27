@@ -302,7 +302,7 @@ def load_config():
     # Make the global variables writable from local scope.
     global config, ROT_CIPHER_SHIFT, PATH_VAULT, PATH_LOG
     
-    # Intantiate a ConfigParser instance and store it in config.
+    # Instantiate a ConfigParser instance and store it in config.
     config = configparser.ConfigParser()
     
     # Check if the config already exists, if not create it with default values.
