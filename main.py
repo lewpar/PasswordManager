@@ -12,6 +12,9 @@ import crypto
 # of the application.
 from time import sleep
 
+# Imports the datetime functions.
+from datetime import datetime
+
 # Imports the vaultmgr.py file I created,
 # only importing the two types I created.
 from vaultmgr import VaultManager, VaultEntry
@@ -44,7 +47,7 @@ def console_clear():
 # Dumps an error to the log file on disk.
 def dump_log(log):
     with open(PATH_LOG, "at") as log_file:
-        log_file.write(f"{str(log)}\r\n")
+        log_file.write(f"[{datetime.now()}]: {str(log)}\r\n")
 
 
 # Saves the vault to disk by serializing the vault list to bytes.
@@ -135,6 +138,8 @@ def view_credential():
         print()
         print("No credentials found, navigate to 'Add Credentials' on the menu to create one")
         print()
+        
+        # Prompt the user to return to menu and discard any input received.
         _ = input("Press <ENTER> to return to main menu.")
         return
     
@@ -218,8 +223,9 @@ def load_vault():
         if not os.path.exists(PATH_VAULT):
             os.mkdir(PATH_VAULT)
 
-        # Just prompts the user on where the vault is created on disk.
+        # Just prompts the user on where the vault is created on disk and logs it.
         print(f"Created vault at '{os.path.realpath(PATH_VAULT_FILE)}'.")
+        dump_log(f"Created vault at '{os.path.realpath(PATH_VAULT_FILE)}'.")
 
         # Create a new instance of the Vault Manager class.
         vault_mgr = VaultManager()
