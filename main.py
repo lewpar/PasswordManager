@@ -297,10 +297,11 @@ def main():
             pass
         except Exception as ex:  # Unexpected error occurred, log to file.
             print("An error occurred trying to execute a menu function with exception:")
-            print(ex)
+            error = f"[L{ex.__traceback__.tb_lineno}] [{type(ex).__name__}]: {ex}"
+            print(error)
             print("Contact your supervisor to report the issue.")
             print(f"Dumping error to '{PATH_LOG}'.")
-            dump_log(f"[L{ex.__traceback__.tb_lineno}] [{type(ex).__name__}]: {ex}")
+            dump_log(error)
             input()
 
 
