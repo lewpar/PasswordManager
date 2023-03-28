@@ -62,7 +62,7 @@ def dump_log(log):
 def is_in_vault(vault_entry: VaultEntry):
     for entry in vault_mgr.vault:
         if entry.username.lower() == vault_entry.username.lower() and \
-                entry.website.lower() == vault_entry.website.lower():
+                entry.resource.lower() == vault_entry.resource.lower():
             return True
         
     return False
@@ -92,24 +92,24 @@ def prompt_overwrite():
 
 # Prompt the user to add a new credential to the vault.
 def add_credential():
-    username, password, website = ("", "", "")
+    username, password, resource = ("", "", "")
     
     # The amount of tries the user has attempted.
     tries = 0
     
     # Loop until all entries are populated with a value.
-    while username == "" or password == "" or website == "":
+    while username == "" or password == "" or resource == "":
         if tries > 0:
             # Clear the entries to prevent caching which allows
             # a desync between display and actual value.
-            username, password, website = ("", "", "")
+            username, password, resource = ("", "", "")
             print()
             print("You must enter a value for all entries.")
             print()
             
         username = input("|| Username: ").strip()
         password = input("|| Password: ").strip()
-        website = input("|| Website: ").strip()
+        resource = input("|| Resource: ").strip()
         
         # Increment tries for next loop.
         tries += 1
@@ -118,7 +118,7 @@ def add_credential():
     password_encrypted = crypto.Rot.encrypt(password, ROT_CIPHER_SHIFT)
 
     # Create a new vault entry with the encrypted password.
-    new_vault_entry = VaultEntry(username, password_encrypted, website)
+    new_vault_entry = VaultEntry(username, password_encrypted, resource)
     
     # Used later to detect if anything has changed and should save the vault.
     should_save = False
@@ -162,13 +162,13 @@ def view_credential():
         _ = input("Press <ENTER> to return to main menu.")
         return
     
-    print("|| entry : username : password : website")
+    print("|| entry : username : password : resource")
     print()
     
     # Iterate over the credentials in the vault and print them.
     for i in range(len(vault_mgr.vault)):
         entry = vault_mgr.vault[i]
-        print(f"|| {i} : {entry.username} : {crypto.Rot.decrypt(entry.password, ROT_CIPHER_SHIFT)} : {entry.website}")
+        print(f"|| {i} : {entry.username} : {crypto.Rot.decrypt(entry.password, ROT_CIPHER_SHIFT)} : {entry.resource}")
 
     print()
     print("To remove an entry, type 'delete' followed by the entry number.")
