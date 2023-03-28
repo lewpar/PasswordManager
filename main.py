@@ -162,13 +162,17 @@ def view_credential():
         _ = input("Press <ENTER> to return to main menu.")
         return
     
-    print("|| entry : username : password : resource")
+    # The padding values for the formatted strings below.
+    alignment_padding = 15
+    alignment_padding_entry = 10
+    
+    print(f"|| {'entry' : <{alignment_padding_entry}} : {'username' : <{alignment_padding}} : {'password' : <{alignment_padding}} : {'resource' : <{alignment_padding}}")
     print()
     
     # Iterate over the credentials in the vault and print them.
     for i in range(len(vault_mgr.vault)):
         entry = vault_mgr.vault[i]
-        print(f"|| {i} : {entry.username} : {crypto.Rot.decrypt(entry.password, ROT_CIPHER_SHIFT)} : {entry.resource}")
+        print(f"|| {i : <{alignment_padding_entry}} : {entry.username : <{alignment_padding}} : {crypto.Rot.decrypt(entry.password, ROT_CIPHER_SHIFT) : <{alignment_padding}} : {entry.resource : <{alignment_padding}}")
 
     print()
     print("To remove an entry, type 'delete' followed by the entry number.")
