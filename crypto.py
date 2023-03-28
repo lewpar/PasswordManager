@@ -10,20 +10,46 @@ class Rot:
     # specified by `shift` places to the right.
     @staticmethod
     def encrypt(passphrase, shift):
-        # Using list comprehension to transform the passphrase into the shifted passphrase,
-        # stored as a list of characters.
-        encrypted_phrase = [Rot.CHAR_SET[(Rot.CHAR_SET.find(c) + shift) % len(Rot.CHAR_SET)] for c in passphrase]
+        # The list of character that will be joined together later.
+        encrypted_chars = []
         
-        # Join the characters together, into a string.
-        return "".join(encrypted_phrase)
+        # Loop over each character in the string passphrase
+        for character in passphrase:
+            # Get the shifted index from the charset.
+            shift_index = Rot.CHAR_SET.find(character) + shift
+            
+            # Divide the shift_index to wrap back around if the index is too large.
+            shift_index = shift_index % len(Rot.CHAR_SET)
+            
+            # Get the character using the index from the charset.
+            shift_char = Rot.CHAR_SET[shift_index]
+            
+            # Append the character to the list
+            encrypted_chars.append(shift_char)
+            
+        # Join the character together into a single string.
+        return "".join(encrypted_chars)
 
     # Shifts the passphrase by the charset 
     # specified by `shift` places to the left.
     @staticmethod
     def decrypt(passphrase, shift):
-        # Using list comprehension to transform the shifted passphrase into the un-shifted passphrase,
-        # stored as a list of characters.
-        decrypted_phrase = [Rot.CHAR_SET[(Rot.CHAR_SET.find(c) - shift) % len(Rot.CHAR_SET)] for c in passphrase]
+        # The list of character that will be joined together later.
+        encrypted_chars = []
         
-        # Join the characters together, into a string.
-        return "".join(decrypted_phrase)
+        # Loop over each character in the string passphrase
+        for character in passphrase:
+            # Get the shifted index from the charset.
+            shift_index = Rot.CHAR_SET.find(character) - shift
+            
+            # Divide the shift_index to wrap back around if the index is too large.
+            shift_index = shift_index % len(Rot.CHAR_SET)
+            
+            # Get the character using the index from the charset.
+            shift_char = Rot.CHAR_SET[shift_index]
+            
+            # Append the character to the list
+            encrypted_chars.append(shift_char)
+            
+        # Join the character together into a single string.
+        return "".join(encrypted_chars)
