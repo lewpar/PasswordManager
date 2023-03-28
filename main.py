@@ -1,3 +1,5 @@
+# Supervisor Sign-off
+
 # Imports the OS related functions, like reading and writing to disk.
 import os
 
