@@ -175,6 +175,8 @@ def view_credential():
         print(f"|| {i : <{alignment_padding_entry}} : {entry.username : <{alignment_padding}} : {crypto.Rot.decrypt(entry.password, ROT_CIPHER_SHIFT) : <{alignment_padding}} : {entry.resource : <{alignment_padding}}")
 
     print()
+    print(f"|| '{len(vault_mgr.vault)}' entries found in the Vault.")
+    print()
     print("To remove an entry, type 'delete' followed by the entry number.")
     print("Example: delete 1")
     print()
