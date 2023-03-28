@@ -334,11 +334,14 @@ def load_config():
 # The entry-point of the application,
 # where the main execution begins for the application.
 def main():
-    # Load the config.ini settings
-    load_config()
-    
-    # Load the user password vault
-    load_vault()
+    try:
+        # Load the config.ini settings
+        load_config()
+        
+        # Load the user password vault
+        load_vault()
+    except Exception as ex:
+        print_error(ex)
 
     # Loop the menu until exit has been requested.
     while not exit_requested:
