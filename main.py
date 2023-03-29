@@ -3,6 +3,9 @@
 # Imports the OS related functions, like reading and writing to disk.
 import os
 
+# Imports the shutil for delete a whole directory tree.
+import shutil
+
 # Imports the crypto.py file I created.
 import crypto
 
@@ -254,25 +257,32 @@ menu_options = {
 
 # Load the vault from disk into the vault_mgr instance.
 def load_vault():
-    # Make the vault_mgr global variable writable from local scope.
-    global vault_mgr
+    try:
+        # Make the vault_mgr global variable writable from local scope.
+        global vault_mgr
 
-    # Check if the Vault File exists.
-    if not os.path.isfile(vault_file_loc()):
-        # Vault path doesn't exist, create it.
-        if not os.path.exists(vault_file_loc()):
-            os.makedirs(os.path.dirname(vault_file_loc()), exist_ok=True)
+        # Check if the Vault File exists.
+        if not os.path.isfile(vault_file_loc()):
+            # Vault path doesn't exist, create it.
+            if not os.path.exists(vault_file_loc()):
+                os.makedirs(os.path.dirname(vault_file_loc()), exist_ok=True)
 
-        # Logs the vault location to log.txt.
-        dump_log(f"Created new vault at '{os.path.realpath(vault_file_loc())}'.")
+            # Logs the vault location to log.txt.
+            dump_log(f"Created new vault at '{os.path.realpath(vault_file_loc())}'.")
 
-        # Create a new instance of the Vault Manager class.
-        vault_mgr = VaultManager(vault_file_loc())
-        vault_mgr.vault_save()
+            # Create a new instance of the Vault Manager class.
+            vault_mgr = VaultManager(vault_file_loc())
+            vault_mgr.vault_save()
 
-    # Vault does exist
-    else:
-        vault_mgr = VaultManager.vault_load(vault_file_loc())
+        # Vault does exist
+        else:
+            vault_mgr = VaultManager.vault_load(vault_file_loc())
+    except EOFError:
+        # Delete the Vault
+        shutil.rmtree(PATH_VAULT)
+        
+        # Recreate the Vault
+        load_vault()
 
 
 # Prompt the user with the main menu.
