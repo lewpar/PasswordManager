@@ -277,7 +277,7 @@ def load_vault():
         # Vault does exist
         else:
             vault_mgr = VaultManager.vault_load(vault_file_loc())
-    except EOFError:
+    except (MemoryError, EOFError):
         # Delete the Vault
         shutil.rmtree(PATH_VAULT)
         
