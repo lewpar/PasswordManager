@@ -249,9 +249,9 @@ def request_exit():
 # The value in the dictionary is a tuple containing the
 # title of the menu option and the pointer to related function.
 menu_options = {
-    0: ("Add Credentials", add_credential),
-    1: ("View Credentials", view_credential),
-    2: ("Quit", request_exit)
+    1: ("Add Credentials", add_credential),
+    2: ("View Credentials", view_credential),
+    3: ("Quit", request_exit)
 }
 
 
@@ -293,7 +293,7 @@ def write_menu():
     
     # Iterate over the menu items dictionary
     # to render the menu item titles & index.
-    for i in range(0, len(menu_options)):
+    for i in range(1, len(menu_options) + 1):
         menu_title, _ = menu_options[i]
         print(f"|| {i}) {menu_title}")
         
@@ -364,7 +364,7 @@ def main():
         load_vault()
     except Exception as ex:
         print_error(ex)
-
+    
     # Loop the menu until exit has been requested.
     while not exit_requested:
         # Clear the screen to remove the vault load text / previous menus, if any.
@@ -389,7 +389,7 @@ def main():
             # Call the function tied to the menu selected.
             menu_function()
         except (ValueError, KeyError):  # Ignore value/key errors and re-prompt menu.
-            pass
+            _ = input("Invalid input, enter a correct number.")
         except Exception as ex:  # Unexpected error occurred, log to file.
             print_error(ex)
             
