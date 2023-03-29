@@ -179,7 +179,6 @@ def view_credential():
         entry = vault_mgr.vault[i]
         print(f"|| {i : <{alignment_padding_entry}} : {entry.username : <{alignment_padding}} : {crypto.Rot.decrypt(entry.password, ROT_CIPHER_SHIFT) : <{alignment_padding}} : {entry.resource : <{alignment_padding}}")
 
-
     # It should display 'entry' instead of 'entries' when there are less than 2 credentials.
     entry_string = "entries" if len(vault_mgr.vault) > 1 else "entry"
     
