@@ -389,7 +389,7 @@ def main():
             # Call the function tied to the menu selected.
             menu_function()
         except (ValueError, KeyError):  # Ignore value/key errors and re-prompt menu.
-            _ = input("Invalid input, enter a correct number.")
+            _ = input("Invalid input, enter the correct number next to the menu option.")
         except Exception as ex:  # Unexpected error occurred, log to file.
             print_error(ex)
             
