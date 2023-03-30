@@ -186,7 +186,7 @@ def view_credential():
     print(f"|| '{len(vault_mgr.vault)}' {entry_string} found in the Vault.")
     print()
     print("To remove an entry, type 'delete' followed by the entry number.")
-    print("Example: delete 1")
+    print("Example: delete 0")
     print()
     print("Otherwise, type 'quit' to return to menu.")
     print()
