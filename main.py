@@ -177,7 +177,7 @@ def view_credential():
     # Iterate over the credentials in the vault and print them.
     for i in range(len(vault_mgr.vault)):
         entry = vault_mgr.vault[i]
-        print(f"|| {i : <{alignment_padding_entry}} : {entry.username : <{alignment_padding}} : {crypto.Rot.decrypt(entry.password, ROT_CIPHER_SHIFT) : <{alignment_padding}} : {entry.resource : <{alignment_padding}}")
+        print(f"|| {(i + 1) : <{alignment_padding_entry}} : {entry.username : <{alignment_padding}} : {crypto.Rot.decrypt(entry.password, ROT_CIPHER_SHIFT) : <{alignment_padding}} : {entry.resource : <{alignment_padding}}")
 
     # It should display 'entry' instead of 'entries' when there are less than 2 credentials.
     entry_string = "entries" if len(vault_mgr.vault) > 1 else "entry"
@@ -186,7 +186,7 @@ def view_credential():
     print(f"|| '{len(vault_mgr.vault)}' {entry_string} found in the Vault.")
     print()
     print("To remove an entry, type 'delete' followed by the entry number.")
-    print("Example: delete 0")
+    print("Example: delete 1")
     print()
     print("Otherwise, type 'quit' to return to menu.")
     print()
@@ -207,15 +207,16 @@ def view_credential():
                 # Check that at least 1 argument has been passed,
                 # but no more than 1.
                 if len(delete_args) != 2:
-                    print("Invalid arguments.")
+                    print("Invalid arguments, you must supply an entry number.")
+                    print("Example: delete 1")
                     continue
                 
                 # Convert the second item in split to an integer.
-                entry_index = int(delete_args[1])
+                entry_index = int(delete_args[1]) - 1
                 
                 # The deletion index is higher than the amount of credentials in the vault.
                 # Continue to next loop and re-prompt.
-                if entry_index > len(vault_mgr.vault) or entry_index < 0:
+                if entry_index + 1 > len(vault_mgr.vault) or entry_index < 0:
                     print("Invalid entry index.")
                     continue
                 
@@ -227,6 +228,10 @@ def view_credential():
             except ValueError or KeyError:  # Catch errors, continue and re-prompt.
                 print("Invalid input.")
                 continue
+            
+        else:
+            print(f"Invalid command '{user_input}', use 'delete' or 'quit'.")
+            continue
             
     # If an entry was deleted, we want to refresh the credentials.
     # Save credentials to disk, clear screen, and re-open the credentials screen.
